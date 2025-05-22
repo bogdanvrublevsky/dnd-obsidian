@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DnD Wiki</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/wiki.css">
+</head>
+
+<body>
+    <header>
+        <h1>DnD Wiki</h1>
+        <nav>
+            <ul>
+                <li><a href="/wiki">Главная</a></li>
+                <li><a href="#">Бестиарий</a></li>
+                <li><a href="#">Классы</a></li>
+                <li><a href="#">Заклинания</a></li>
+                <li><a href="#">Предметы</a></li>
+                <li><span id="user-info">Загрузка...</span></li>
+                <li><button id="logout-btn" class="logout-btn">Выйти</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="welcome-message">
+            <h2>Добро пожаловать в DnD Wiki!</h2>
+            <p>Здесь вы найдете всю необходимую информацию для ваших приключений в мире Dungeons & Dragons.</p>
+        </div>
+
+        <div class="wiki-content">
+            <div class="category-card">
+                <h3>Бестиарий</h3>
+                <p>Информация о монстрах и существах мира D&D.</p>
+            </div>
+            <div class="category-card">
+                <h3>Классы</h3>
+                <p>Описания и руководства по всем классам персонажей.</p>
+            </div>
+            <div class="category-card">
+                <h3>Расы</h3>
+                <p>Подробная информация о расах игровых персонажей.</p>
+            </div>
+            <div class="category-card">
+                <h3>Заклинания</h3>
+                <p>Каталог всех заклинаний мира D&D.</p>
+            </div>
+            <div class="category-card">
+                <h3>Предметы</h3>
+                <p>Магические и обычные предметы для ваших приключений.</p>
+            </div>
+            <div class="category-card">
+                <h3>Правила</h3>
+                <p>Базовые и продвинутые правила игры.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user information when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/user/check-auth')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.authenticated && data.user) {
+                        const username = data.user.user_metadata?.username || data.user.email;
+                        document.getElementById('user-info').textContent = username;
+                    } else {
+                        // Redirect to login if not authenticated
+                        window.location.href = '/';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking authentication:', error);
+                    window.location.href = '/';
+                });
+        });
+
+        // Handle logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            fetch('/api/user/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/';
+                    } else {
+                        console.error('Logout failed:', data.error);
+                        alert('Не удалось выйти из системы. Пожалуйста, попробуйте снова.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                    alert('Произошла ошибка. Пожалуйста, попробуйте позже.');
+                });
+        });
+    </script>
+</body>
+
+</html>

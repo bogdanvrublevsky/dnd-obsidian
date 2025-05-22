@@ -1,0 +1,18 @@
+<section id="register-form">
+    <form id="register-form-element" onsubmit="handleRegistration(event)">
+        <div><label for="username">Ваше имя:</label>
+            <input type="text" id="username" name="username" autocomplete="on" required>
+        </div>
+        <div><label for="email">Email:</label>
+            <input type="email" id="email" name="email" autocomplete="on" required>
+        </div>
+        <div><label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" autocomplete="on" required>
+        </div>
+        <div><label for="confirmPassword">Подтверждение:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="on" required>
+        </div>
+        <div id="register-error" style="color: red; display: none;"></div>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</section>
